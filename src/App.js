@@ -1,95 +1,56 @@
-import { useState } from "react";
+import React from "react";
 import "./App.css";
+// import ReactDOM  from "react-dom";
 
-function Navbar(props) {
-  let cartNo = props.cartNo
-  return(
-    <>
-    <div className="navcontainer">
-      <h2>Start Bootstrap</h2>
-      <ul>
-        <li>Home</li>
-        <li>About</li>
-        <li>Shop</li>
-      </ul>
-      <div className="cart">
-        <button className="two">cart <span className="cartNo">{cartNo}</span></button>
+class App extends React.Component {
+  constructor() {
+    super()
+    this.state={counter:0}
+    this.increase = this.increase.bind(this);
+  }
+  
+  increase()
+  {
+    this.setState(prevState=>{
+      return{counter: prevState.counter+1}
+    })
+    console.log(this.state.counter)
+  }
+
+  componentDidUpdate()
+  {
+    console.log(this.state.counter)
+  }
+
+  decrease = ()=>{
+    if(this.state.counter>0){
+      this.setState(prevState=>{
+      return{counter: prevState.counter-1}
+    })
+    }
+  }
+  reset = ()=> {
+    this.setState({counter: 0})
+  }
+
+
+  render(){
+    return(
+      <>
+      <div className="container">
+        <div className="innerContainer">
+          <h2>Counter App</h2>
+          <input type="text" id="counterValue" disabled value={this.state.counter}></input>
+          <div className="buttonClass">
+            <div><button onClick={this.increase}>+</button></div>
+            <div><button onClick={this.decrease}>-</button></div>
+          </div>
+          <div className="reset" onClick={this.reset}><button>Reset</button></div>
+        </div>
       </div>
-    </div>
-    </>
-  )
-}
-
-function Product(props) {
-  let img = "https://via.placeholder.com/250x300";
-  let name = props.value.name;
-  let price = props.value.price;
-  let cartName = (!props.value.addedToCart)? "Add to cart" : "Remove";
-
-const handleClick = () => {
-  console.log(cartName);
-  if(cartName === "Add to cart") props.parentCallBack(1, name)
-  else props.parentCallBack(-1, name)
-}
-
-  return(
-    <div className="card">
-      <img src={img} alt="place" />
-      <h2>{name}</h2>
-      <p>{price}</p>
-      <button className="one" onClick={handleClick}>{cartName}</button>
-    </div>
-  )
-}
-
-function App() {
-  const [items] =useState([
-    {name: "Fancy Product",
-     price:"$40.00 - $80.00",
-     addedToCart:false},
-    {name:"Special Item",
-    price:"$18.00",
-    addedToCart:false},
-    {name:"Sale Item",
-    price:"$25.00",
-    addedToCart:false},
-    {name:"Popular Product",
-    price:"$40.00",
-    addedToCart:false},
-    {name:"Sale Item",
-    price:"$25.00",
-    addedToCart:false},
-    {name:"Popular Product",
-    price:"$40.00",
-    addedToCart:false},
-    {name: "Fancy Product",
-    price:"$120.00 - $280.00",
-    addedToCart:false},
-    {name:"Special Item",
-    price:"$18.00",
-    addedToCart:false}
-  ])
-
-  const [cartNo, setcartNo] = useState(0);
-
-  const callBackSet = (data,name)=> {
-  setcartNo(cartNo + data)
-  console.log(name)
-  items.map((it)=>{
-    if(name === "it.name") it.addedToCart = !it.addedToCart;
-    return it;
-  })
-}
-  return(
-    <div className="App">
-      <Navbar cartNo={cartNo} />
-      <div className="cardContainer">
-        {items.map(item => {
-          return <Product value={item} parentCallBack={callBackSet} />
-        })}
-      </div>
-    </div>
-  );
+      </>
+    )
+  }
 }
 
 export default App;
